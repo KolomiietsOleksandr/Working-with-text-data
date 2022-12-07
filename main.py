@@ -3,7 +3,7 @@ user = input('Write information:')
 try:
     input_info = user.split(' ')
     #Specify the data
-    file_directory = input_info[0] #File name: Olympic_Data.tsv
+    file_directory = input_info[0]  #File name: Olympic_Data.tsv
     input_command = input_info[1]
     input_country = input_info[2]
     input_year = input_info[3]
@@ -35,21 +35,26 @@ with open(file_directory, 'r') as file:
 
         #Command -medals
         if input_command == '-medals':
-            medals = True
-            while medals == True:
-                if medal != 'NA\n' and input_year == year:
-                    if input_country == noc or input_country == team:
+            if medal != 'NA\n' and input_year == year:
+                if input_country == noc or input_country == team:
 
-                        list = (f'{name}-{sport}-{medal}')
+                    list = (f'{name}-{sport}-{medal}')
+                    #Count total medals
+                    if medal == 'Gold\n': gold += 1
+                    if medal == 'Silver\n': silver += 1
+                    if medal == 'Bronze\n': bronze += 1
 
-                        if medal == 'Gold\n': gold += 1
-                        if medal == 'Silver\n': silver += 1
-                        if medal == 'Bronze\n': bronze += 1
-
-                        x = x + res_list.join(list)
-                        i += 1
-
-                        if i == 10:
-                            print(x)
-                            print(f'Total medals: Gold - {gold}, Silver - {silver}, Bronze - {bronze}')
-                            medals = False
+                    y = (f'Total medals: Gold - {gold}, Silver - {silver}, Bronze - {bronze}')
+                    #Add result to list
+                    x = x + res_list.join(list)
+                    i += 1
+                    #Print result
+                    if i == 10:
+                        print(x)
+                        print(y)
+                        break
+#Command -output to write reselts in new file
+if '-output' in user:
+    with open('result.txt','w') as file:
+        file.write(x)
+        file.write(y)
