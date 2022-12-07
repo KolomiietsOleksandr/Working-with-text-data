@@ -12,7 +12,13 @@ except: print('Invalid data')
 with open(file_directory, 'r') as file:
     file.readline() #Skip headlines
 
-    res_list = []
+    #VARIABLES
+    res_list = ''
+    x = ''
+    gold = 0
+    silver = 0
+    bronze = 0
+    i = 0
 
     while True:
         line = file.readline()
@@ -26,3 +32,24 @@ with open(file_directory, 'r') as file:
         year = info[9]
         sport = info[12]
         medal = info[14]
+
+        #Command -medals
+        if input_command == '-medals':
+            medals = True
+            while medals == True:
+                if medal != 'NA\n' and input_year == year:
+                    if input_country == noc or input_country == team:
+
+                        list = (f'{name}-{sport}-{medal}')
+
+                        if medal == 'Gold\n': gold += 1
+                        if medal == 'Silver\n': silver += 1
+                        if medal == 'Bronze\n': bronze += 1
+
+                        x = x + res_list.join(list)
+                        i += 1
+
+                        if i == 10:
+                            print(x)
+                            print(f'Total medals: Gold - {gold}, Silver - {silver}, Bronze - {bronze}')
+                            medals = False
