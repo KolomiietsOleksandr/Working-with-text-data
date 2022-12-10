@@ -1,60 +1,68 @@
-user = input('Write information:')
+import argparse
 
-try:
-    input_info = user.split(' ')
-    #Specify the data
-    file_directory = input_info[0]  #File name: Olympic_Data.tsv
-    input_command = input_info[1]
-    input_country = input_info[2]
-    input_year = input_info[3]
-except: print('Invalid data')
-
-with open(file_directory, 'r') as file:
-    file.readline() #Skip headlines
-
-    #VARIABLES
-    res_list = ''
-    x = ''
+#First task
+def medals(filename,country,year, output):
     gold = 0
     silver = 0
     bronze = 0
+
+    res_list = ''
+    res = ''
+
     i = 0
 
-    while True:
-        line = file.readline()
-        if not line: break
+    with open(filename, "r") as file:
+            while True:
+                line = file.readline()
+                if not line: break
 
-        #Split data by information
-        info = line.split('	')
-        name = info[1]
-        team = info[6]
-        noc = info[7]
-        year = info[9]
-        sport = info[12]
-        medal = info[14]
+                #Split data by information
+                info = line.split('\t')
+                _name = info[1]
+                _team = info[6]
+                _noc = info[7]
+                _year = info[9]
+                _sport = info[12]
+                _medal = info[14]
+                if year == _year:
+                    if country == _noc or country == _team:
+                        if _medal != 'NA\n':
+                            list = (f'{_name}-{_sport}-{_medal}')
+                            #Count total medals
+                            if _medal == 'Gold\n': gold += 1
+                            if _medal == 'Silver\n': silver += 1
+                            if _medal == 'Bronze\n': bronze += 1
 
-        #Command -medals
-        if input_command == '-medals':
-            if medal != 'NA\n' and input_year == year:
-                if input_country == noc or input_country == team:
+                            total_medals = (f'Total medals: Gold - {gold}, Silver - {silver}, Bronze - {bronze}')
+                            #Add result to list
+                            res = res + res_list.join(list)
+                            i += 1
+                            print(i)
+                            #Print result
+                            if i == 10:
+                                print(res)
+                                print(total_medals)
+                                break
+            if output == True:
+                with open('result.txt','w') as file:
+                    file.write(res)
+                    file.write(total_medals)
 
-                    list = (f'{name}-{sport}-{medal}')
-                    #Count total medals
-                    if medal == 'Gold\n': gold += 1
-                    if medal == 'Silver\n': silver += 1
-                    if medal == 'Bronze\n': bronze += 1
 
-                    y = (f'Total medals: Gold - {gold}, Silver - {silver}, Bronze - {bronze}')
-                    #Add result to list
-                    x = x + res_list.join(list)
-                    i += 1
-                    #Print result
-                    if i == 10:
-                        print(x)
-                        print(y)
-                        break
-#Command -output to write reselts in new file
-if '-output' in user:
-    with open('result.txt','w') as file:
-        file.write(x)
-        file.write(y)
+def main():
+    parser = argparse.ArgumentParser()
+    #Add command
+    parser.add_argument("--command", required=True)
+    #Add arguments
+    parser.add_argument("--filename", required=True)
+    parser.add_argument("--country", required=True)
+    parser.add_argument("--year", required=True)
+    parser.add_argument("--output",type=bool, required=False)
+
+    args = parser.parse_args()
+
+    if args.command == "medals":
+        medals(args.filename,args.country,args.year,args.output)
+
+
+main()
