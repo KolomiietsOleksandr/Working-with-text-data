@@ -63,6 +63,7 @@ def total(filename,year):
                 _year = info[9]
                 _medal = info[14]
                 if year == _year:
+                    #check if country already exists in dict
                     if _team not in C_M:
                         C_M[_team]= [0, 0, 0]
                     if _medal != 'NA\n':
@@ -76,7 +77,7 @@ def total(filename,year):
             continue
         else:
             print(f"{country} has total {total} medals: {C_M[country][0]} Gold, {C_M[country][1]} Silver, {C_M[country][2]}")
-                    
+#Creating a dictionary that stores medals for each country                    
 C_M = {
 
     }
