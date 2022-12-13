@@ -121,12 +121,12 @@ def overall(filename, countries):
 def main():
     parser = argparse.ArgumentParser()
     # Add command
-    parser.add_argument("--command", required=False)
+    parser.add_argument("--command","--c", required=False)
     parser.add_argument('--overall', nargs='+', required=False)
     # Add arguments
-    parser.add_argument("--filename", required=False)
+    parser.add_argument("--filename","--f", required=False)
     parser.add_argument("--country", required=False)
-    parser.add_argument("--year", required=False)
+    parser.add_argument("--year","--y", required=False)
     parser.add_argument("--output", type=bool, required=False)
 
     args = parser.parse_args()
