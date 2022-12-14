@@ -116,6 +116,63 @@ def overall(filename, countries):
             medals_by_year.clear()
             #Reset while
             file.seek(0)
+    
+def interactive(filename):
+    country = input("Input country or its noc: ")
+    temp_dict = {}
+    games_dict = {}
+    all_medals_gold = 0
+    all_medals_silver = 0
+    all_medals_bronze = 0
+    amt_games = 0
+    
+    with open(filename, "r") as file:
+        while True:
+            line = file.readline()
+            if not line: break
+
+            # Split data by information
+            info = line.split('\t')
+            _team = info[6]
+            _noc = info[7]
+            _games = info[8]
+            _year = info[9]
+            _city = info[11]
+            _medal = info[14]
+            if country == _team or country == _noc:
+                temp_dict[_city]=[int(_year)]
+                if _games not in games_dict:
+                        games_dict[_games] = [0, 0, 0, 0]
+                else:
+                    if _medal != "NA":
+                        if _medal == 'Gold\n': games_dict[_games][1] += 1
+                        if _medal == 'Silver\n': games_dict[_games][2] += 1
+                        if _medal == 'Bronze\n': games_dict[_games][3] += 1
+                        games_dict[_games][0]=games_dict[_games][1]+games_dict[_games][2]+games_dict[_games][3]
+                        
+
+        for game in games_dict:
+            all_medals_gold += games_dict[game][1]
+            all_medals_silver += games_dict[game][2]
+            all_medals_bronze += games_dict[game][3]
+            amt_games += 1
+        avg_gold = all_medals_gold//amt_games
+        avg_silver = all_medals_silver//amt_games
+        avg_bronze = all_medals_bronze//amt_games
+        worst_game = min(games_dict, key=games_dict.get)
+        best_game = max(games_dict, key=games_dict.get)
+        print(f"Best game: {best_game} with {games_dict[best_game][0]} medals. Worst game {worst_game} with {games_dict[worst_game][0]} medals.")
+        print(f"Avg gold medals: {avg_gold}, Avg silver {avg_silver}, Avg bronze {avg_bronze}")
+
+                
+                
+    
+    first = min(temp_dict, key=temp_dict.get)
+    print(f"First game: {first} ,{temp_dict[first]}")
+
+
+    
+
 
 
 def main():
@@ -137,6 +194,8 @@ def main():
         total(args.filename, args.year)
     if args.overall:
         overall(args.filename, args.overall)
+    if args.command == "interactive":
+        interactive(args.filename)
 
 
 main()
