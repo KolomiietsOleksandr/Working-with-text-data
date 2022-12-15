@@ -25,8 +25,8 @@ def medals(filename, country, year, output):
             _year = info[9]
             _sport = info[12]
             _medal = info[14]
-            if year not in file: print('Invalid year')
-            elif country not in file: print('Invalid country')
+            #if year not in file: print('Invalid year')
+            #elif country not in file: print('Invalid country')
             if year == _year:
                 if country == _noc or country == _team:
                     if _medal != 'NA\n':
@@ -116,10 +116,12 @@ def overall(filename, countries):
             medals_by_year.clear()
             #Reset while
             file.seek(0)
-    
+#4th task
 def interactive(filename):
     country = input("Input country or its noc: ")
+    #dictionary for 1st game
     temp_dict = {}
+    #dictionary for best/worst games
     games_dict = {}
     all_medals_gold = 0
     all_medals_silver = 0
@@ -142,23 +144,28 @@ def interactive(filename):
             if country == _team or country == _noc:
                 temp_dict[_city]=[int(_year)]
                 if _games not in games_dict:
+                    #initializing an item in dictionary in format [overall_medals, gold, silver, bronze]
                         games_dict[_games] = [0, 0, 0, 0]
                 else:
                     if _medal != "NA":
                         if _medal == 'Gold\n': games_dict[_games][1] += 1
                         if _medal == 'Silver\n': games_dict[_games][2] += 1
                         if _medal == 'Bronze\n': games_dict[_games][3] += 1
+                        #counting overall medals
                         games_dict[_games][0]=games_dict[_games][1]+games_dict[_games][2]+games_dict[_games][3]
                         
-
+        #counting medals of each type and total amount of games
         for game in games_dict:
             all_medals_gold += games_dict[game][1]
             all_medals_silver += games_dict[game][2]
             all_medals_bronze += games_dict[game][3]
             amt_games += 1
+        #avg for each medal
         avg_gold = all_medals_gold//amt_games
         avg_silver = all_medals_silver//amt_games
         avg_bronze = all_medals_bronze//amt_games
+        #from my observation min(), max() for dictionary with lists as values
+        #take min and max just from 1st item that's why we have overall amt of medals as index [0]
         worst_game = min(games_dict, key=games_dict.get)
         best_game = max(games_dict, key=games_dict.get)
         print(f"Best game: {best_game} with {games_dict[best_game][0]} medals. Worst game {worst_game} with {games_dict[worst_game][0]} medals.")
